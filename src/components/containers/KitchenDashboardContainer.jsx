@@ -65,7 +65,7 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
                 limit: 200,
             },
             sort: {
-                fieldName: 'createdAt',
+                fieldName: 'menuOrderId',
                 dir: 'DESC',
             },
             filter: {
@@ -128,8 +128,24 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
             });
     }
 
-    onComplete() {
-        
+    onUpdateOrderStatus(menuOrderId) {
+        const input = {
+            menuOrderId
+        };
+
+        this.service.updateMenuOrderStatus(input)
+            .then((response) => {
+                const { data, graphQLErrors } = response;
+
+                if (graphQLErrors) {
+                    ModalUtils.errorMessage(graphQLErrors);
+                    return;
+                }
+
+                if (data && data.updateMenuOrderStatus) {
+                    ModalUtils.successMessage(null, 'Order updated successfully');
+                }
+            });
     }
 
     //SUBSCRIPTIONS
@@ -193,7 +209,7 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
         this.getMenus = this.getMenus.bind(this);
         this.getMenuOrders = this.getMenuOrders.bind(this);
         this.onSortMeal = this.onSortMeal.bind(this);
-        this.onComplete = this.onComplete.bind(this);
+        this.onUpdateOrderStatus = this.onUpdateOrderStatus.bind(this);
         
         this.subscribe = this.subscribe.bind(this);
         this.responseSubscription = this.responseSubscription.bind(this);
@@ -210,7 +226,7 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
                 {...props}
                 {...state}
                 onSortMeal={this.onSortMeal}
-                onComplete={this.onComplete}
+                onUpdateOrderStatus={this.onUpdateOrderStatus}
             />
         );
     }

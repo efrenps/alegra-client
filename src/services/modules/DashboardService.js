@@ -50,4 +50,11 @@ export default class DashboardService {
         return this.graphqlClient
             .mutate(Mutations.ASSING_MENU_IN_ORDER, input);
     }
+
+    async updateMenuOrderStatus(input) {
+        return this.graphqlClient
+            .mutate(Mutations.UPDATE_MENU_ORDER_STATUS, input);
+    }
+
+    
 }

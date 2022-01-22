@@ -39,7 +39,7 @@ class NavMenu extends Component {
                 },
             );
         }
-        if (keyStore.hasPermission(Permissions.KITCHEN)) {
+        if (keyStore.hasPermission(Permissions.MANAGER) || keyStore.hasPermission(Permissions.KITCHEN)) {
             modules.push(
                 {
                     text: 'Dashboard',
@@ -48,7 +48,7 @@ class NavMenu extends Component {
                 },
             );
         }
-        if (keyStore.hasPermission(Permissions.FOOD_STORAGE)) {
+        if (keyStore.hasPermission(Permissions.MANAGER) || keyStore.hasPermission(Permissions.FOOD_STORAGE)) {
             modules.push(
                 {
                     text: 'Dashboard',

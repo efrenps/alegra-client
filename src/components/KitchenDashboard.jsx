@@ -32,7 +32,7 @@ class KitchenDashboard extends Component {
     getColumns(headerName) {
         const {
             props: {
-                classes, onSortMeal,
+                classes, onSortMeal, onUpdateOrderStatus
             },
         } = this;
         const columnStyle = {
@@ -53,20 +53,20 @@ class KitchenDashboard extends Component {
                 minWidth: 100,
                 Cell: props => {
                     const { original } = props;
-                    const { menuOrderId, menu } = original;
-                    const isNewOrder = original.status === 'pending';
-                    const isCooking = original.status === 'cooking';
-                    const hasMenuData = original.status === 'storage' || original.status === 'cooking';
+                    const { menuOrderId, menu, status } = original;
+                    const isNewOrder = status === 'pending';
+                    const isCooking = status === 'cooking';
+                    const hasMenuData = status === 'storage' || status === 'cooking';
 
                     return (
                         <Paper className={classes.paper} key={ `key-${menuOrderId}` }>
                             <Card className={classes.rootCard} variant="outlined">
                                 <CardContent>
-                                    <Typography variant="h4" component="div">
+                                    <Typography variant="h3" component="div">
                                         { `Order #${menuOrderId}` }
                                     </Typography>
                                     {hasMenuData && (
-                                        <Typography variant="body2" component="div">
+                                        <Typography variant="h5" component="div">
                                             { menu.name }
                                         </Typography>
                                     )}
@@ -89,7 +89,7 @@ class KitchenDashboard extends Component {
                                             size="small"
                                             variant="contained"
                                             className={clsx(classes.smallButton, classes.blueButton)}
-                                            // onClick={() => onSortMeal()}
+                                            onClick={() => onUpdateOrderStatus(menuOrderId)}
                                         >
                                             Done
                                         </Button>
@@ -241,7 +241,7 @@ KitchenDashboard.propTypes = {
     loading: PropTypes.bool.isRequired,
     selectedMenuId: PropTypes.number,
     onSortMeal: PropTypes.func.isRequired,
-    onComplete: PropTypes.func.isRequired,
+    onUpdateOrderStatus: PropTypes.func.isRequired,
 };
 
 export default withRouter(withStyles(styles)(KitchenDashboardContainer(KitchenDashboard)));

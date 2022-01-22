@@ -16,22 +16,11 @@ export default class Mutations {
         }
     `;
 
-    static CREATE_PRODUCT_VENDOR = gql`
-        mutation addProduct($input: ProductInput) {
-            addProduct(input: $input){
-                productId
-            }
-        }
-    `;
-
-    static UPDATE_PRODUCT_VENDOR = gql`
-        mutation updateProduct(
-            $id: Int!
-            $input: ProductInput
+    static UPDATE_MENU_ORDER_STATUS = gql`
+        mutation updateMenuOrderStatus(
+            $menuOrderId: Int!
         ) {
-            updateProduct(id: $id, input: $input){
-                productId
-            }
+            updateMenuOrderStatus(menuOrderId: $menuOrderId)
         }
     `;
 }

@@ -16,6 +16,7 @@ import {
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import DashboardStyles from '../styles/DashboardStyles';
@@ -31,7 +32,7 @@ class ManagerDashboard extends Component {
     getColumns(stage) {
         const {
             props: {
-                classes
+                classes, onUpdateOrderStatus
             },
         } = this;
         const columnStyle = {
@@ -52,24 +53,42 @@ class ManagerDashboard extends Component {
                 minWidth: 100,
                 Cell: props => {
                     const { original } = props;
-                    let subtitle = '';
-
-                    if (original.menuId && original.menu) {
-                        const { menu } = original;
-                        subtitle = menu.name;
-                    }
+                    const { menuOrderId, menu, status } = original;
+                    const isReady = status === 'ready';
+                    const hasMenuData = status === 'storage' || status === 'cooking' || status === 'ready';
+                    const showStatus = status === 'storage' || status === 'cooking';
+                    const statusLabel = status === 'storage' ? 'Preparing Ingredients' : status;
 
                     return (
                         <Paper className={classes.paper} key={ `key-${original.menuOrderId}` }>
                             <Card className={classes.rootCard} variant="outlined">
                                 <CardContent>
-                                    <Typography variant="h4" component="div">
+                                    <Typography variant="h3" component="div">
                                         { `Order #${original.menuOrderId}` }
                                     </Typography>
-                                    <Typography variant="body2" component="div">
-                                        { subtitle }
-                                    </Typography>
+                                    {hasMenuData && (
+                                        <Typography variant="h5" component="div">
+                                            { menu.name }
+                                        </Typography>
+                                    )}
+                                    {showStatus && (
+                                        <Typography variant="body2" component="div">
+                                            { statusLabel }
+                                        </Typography>
+                                    )}
                                 </CardContent>
+                                {isReady && (
+                                    <CardActions disableSpacing className={classes.parentFlexCenter}>
+                                        <Button
+                                            size="small"
+                                            variant="contained"
+                                            className={clsx(classes.smallButton, classes.blueButton)}
+                                            onClick={() => onUpdateOrderStatus(menuOrderId)}
+                                        >
+                                            Deliver
+                                        </Button>
+                                    </CardActions>
+                                )}
                             </Card>
                         </Paper>        
                     );
@@ -219,7 +238,7 @@ ManagerDashboard.propTypes = {
     menuOrders: PropTypes.arrayOf(PropTypes.object).isRequired,
     loading: PropTypes.bool.isRequired,
     onAddOrder: PropTypes.func.isRequired,
-    onDeliveryOrder: PropTypes.func.isRequired,
+    onUpdateOrderStatus: PropTypes.func.isRequired,
 };
 
 export default withRouter(withStyles(styles)(ManagerDashboardContainer(ManagerDashboard)));

@@ -93,7 +93,7 @@ const ManagerDashboardContainer = (WrappedComponent) => class extends Component 
             });
     }
 
-    onAdd() {
+    onAddOrder() {
         this.service.createMenuOrder()
             .then((response) => {
                 const { data, graphQLErrors } = response;
@@ -109,8 +109,24 @@ const ManagerDashboardContainer = (WrappedComponent) => class extends Component 
             });
     }
 
-    onDelivery() {
-        
+    onUpdateOrderStatus(menuOrderId) {
+        const input = {
+            menuOrderId
+        };
+
+        this.service.updateMenuOrderStatus(input)
+            .then((response) => {
+                const { data, graphQLErrors } = response;
+
+                if (graphQLErrors) {
+                    ModalUtils.errorMessage(graphQLErrors);
+                    return;
+                }
+
+                if (data && data.updateMenuOrderStatus) {
+                    ModalUtils.successMessage(null, 'Order updated successfully');
+                }
+            });
     }
 
     //SUBSCRIPTIONS
@@ -173,8 +189,8 @@ const ManagerDashboardContainer = (WrappedComponent) => class extends Component 
     initBind() {
         this.getMenus = this.getMenus.bind(this);
         this.getMenuOrders = this.getMenuOrders.bind(this);
-        this.onAdd = this.onAdd.bind(this);
-        this.onDelivery = this.onDelivery.bind(this);
+        this.onAddOrder = this.onAddOrder.bind(this);
+        this.onUpdateOrderStatus = this.onUpdateOrderStatus.bind(this);
         
         this.subscribe = this.subscribe.bind(this);
         this.responseSubscription = this.responseSubscription.bind(this);
@@ -190,8 +206,8 @@ const ManagerDashboardContainer = (WrappedComponent) => class extends Component 
             <WrappedComponent
                 {...props}
                 {...state}
-                onAddOrder={this.onAdd}
-                onDeliveryOrder={this.onDelivery}
+                onAddOrder={this.onAddOrder}
+                onUpdateOrderStatus={this.onUpdateOrderStatus}
             />
         );
     }

@@ -63,9 +63,17 @@ const App = () => {
                                         <ManagerDashboard />
                                     </ProtectedRoute>
                                 )}
-                                {keyStore.hasPermission(Permissions.KITCHEN) && (
+                                {(keyStore.hasPermission(Permissions.MANAGER) || keyStore.hasPermission(Permissions.KITCHEN)) && (
                                     <ProtectedRoute
                                         path='/kitchen-dashboard'
+                                        exact
+                                    >
+                                        <KitchenDashboard />
+                                    </ProtectedRoute>
+                                )}
+                                {(keyStore.hasPermission(Permissions.MANAGER) || keyStore.hasPermission(Permissions.FOOD_STORAGE)) && (
+                                    <ProtectedRoute
+                                        path='/storage-dashboard'
                                         exact
                                     >
                                         <KitchenDashboard />

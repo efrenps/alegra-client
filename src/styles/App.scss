@@ -1,0 +1,24 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+@import "~bootstrap/scss/_forms.scss";
+@import "~bootstrap/scss/_grid.scss";
+@import "~bootstrap/scss/_carousel.scss";
+@import "~bootstrap/scss/_buttons.scss";
+@import "~bootstrap/scss/_nav.scss";
+@import "~bootstrap/scss/_transitions.scss";
+@import "~bootstrap/scss/_alert.scss";
+@import "~bootstrap/scss/_badge.scss";
+@import "~bootstrap/scss/_variables.scss";
+
+@import "table";
+@import "Dropdown";
+@import 'Flex';
+@import 'inventory-gallery';
+@import 'select';
+@import 'Split';
+@import 'Text';
+@import 'Jodit';
+@import 'Calendar';
+@import 'tags';

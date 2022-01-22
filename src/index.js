@@ -1,17 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import './styles/index.scss';
+import App from './components/App';
+import './styles/App.scss';
+// import 'dom';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+// // react-grid-layout
+// import 'react-grid-layout/css/styles.css';
+// // eslint-disable-next-line import/no-extraneous-dependencies
+// import 'react-resizable/css/styles.css';
+
+// Material UI
+import palette from './styles/theme/palette';
+import shadows, { customShadows } from './styles/theme/shadows';
+import typography from './styles/theme/typography';
+import { createTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+import { ApolloProvider } from '@apollo/client';
+import client from './services/apollo/ApolloClient';
+
+const theme = createTheme({
+    palette,
+    typography,
+    shadows,
+    customShadows,
+});
+
+const RootComponent = () => (
+  <MuiThemeProvider theme={theme}>
+      <ApolloProvider client={client}>
+          <App />
+      </ApolloProvider>
+  </MuiThemeProvider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+ReactDOM.render(<RootComponent />, document.getElementById('root'));

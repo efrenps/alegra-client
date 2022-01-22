@@ -1,0 +1,71 @@
+
+.select-bootstrap.select-sm {
+    .css-yk16xz-control, .css-1pahdxg-control, .css-1fhf3k1-control {
+        height: 31px;
+        min-height: auto;
+        font-size: 14px;
+
+        & > div {
+            margin-top: -2px;
+            padding-left: 4px;
+        }
+    }
+}
+
+.select-bootstrap.select-sm > .css-26l3qy-menu {
+    font-size: 14px;
+}
+
+.custom-mail-detail {
+    display: flex;
+    align-items: flex-end;
+}
+
+.custom-mail-detail .custom-mail {
+    align-items: center;
+    border-bottom: transparent !important;
+}
+
+.custom-mail {
+    display: flex;
+    align-items: flex-end;
+    border-bottom: 1px solid rgb(238, 238, 238) !important;
+}
+
+.custom-mail-detail .copy,
+.custom-mail .copy {
+    font-size: 14px;
+    color: #777;
+    cursor: pointer;
+    margin-right: 10px; 
+}
+
+.custom-mail-detail .container-copy,
+.custom-mail .container-copy {
+    margin-bottom: 8px;
+}
+
+.custom-mail-detail .copy:hover,
+.custom-mail .copy:hover {
+    text-decoration: underline;
+}
+
+.custom-mail.react-multi-email,
+.custom-mail .react-multi-email,
+.custom-mail-detail .react-multi-email {
+    border: none;
+}
+
+.custom-mail.react-multi-email > input,
+.custom-mail .react-multi-email > input {
+    background: transparent;
+    color: #000;
+}
+
+.custom-mail .item{
+    border-radius: 10px;
+    border: 1px
+    solid #f29900;
+    height: 20px;
+    line-height: 20px;
+}

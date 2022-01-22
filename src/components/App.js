@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
-// import UserQuery from 'services/graphQL/query/UserQuery';
+import React, { useState } from 'react';
 
 // Router
 import {
@@ -17,6 +15,7 @@ import RedirectNotFound from './containers/RedirectNotFound';
 import BaseLayout from './layout/BaseLayout';
 import Login from './Login';
 import ManagerDashboard from './ManagerDashboard';
+import KitchenDashboard from './KitchenDashboard';
 
 // Utils
 import '../services/api/Axios.configuration';
@@ -27,15 +26,7 @@ import UserContext from './UserContext';
 
 const App = () => {
     const keyStore = new KeyStore();
-    const token = !keyStore.exists();
     const [userInformation, setUserInformation] = useState();
-    //const { loading, data, error } = useQuery(UserQuery.USER_DETAILS, { skip: token });
-
-    // useEffect(() => {
-    //     if (!error && !loading) {
-    //         setUserInformation(data?.userDetails);
-    //     }
-    // }, [data, error, loading]);
 
     const updateUserInformation = (record) => {
         setUserInformation(record);
@@ -70,6 +61,14 @@ const App = () => {
                                         exact
                                     >
                                         <ManagerDashboard />
+                                    </ProtectedRoute>
+                                )}
+                                {keyStore.hasPermission(Permissions.KITCHEN) && (
+                                    <ProtectedRoute
+                                        path='/kitchen-dashboard'
+                                        exact
+                                    >
+                                        <KitchenDashboard />
                                     </ProtectedRoute>
                                 )}
                                 <RedirectNotFound />

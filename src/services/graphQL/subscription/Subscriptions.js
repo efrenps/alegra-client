@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export default class ProductsSubscription {
+export default class Subscriptions {
     static PRODUCT_VENDOR_LIST = gql`
         subscription productVendorList($searchTerm: String, $status: Boolean) {
             productVendorList(searchTerm: $searchTerm, status: $status) {

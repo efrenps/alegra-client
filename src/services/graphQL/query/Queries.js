@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export default class SettingsQuery {
+export default class Queries {
     static GET_MENUS = gql`
         query getMenus {
             getMenus {

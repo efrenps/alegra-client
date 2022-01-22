@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export default class ProductMutate {
+export default class Mutations {
     static CREATE_MENU_ORDER = gql`
         mutation createMenuOrder {
             createMenuOrder

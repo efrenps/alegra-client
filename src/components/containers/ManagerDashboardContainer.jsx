@@ -5,15 +5,15 @@ import SubscriptionActionType from '../../utils/SubscriptionActionType';
 import ModalUtils from '../../utils/ModalUtils';
 
 // GraphQL
-import ManagerService from '../../services/modules/ManagerService';
+import DashboardService from '../../services/modules/DashboardService';
 import GraphQLClient from '../../services/apollo/GraphQLClient';
-import ManagerSubscription from '../../services/graphQL/subscription/ManagerSubscription';
+import Subscriptions from '../../services/graphQL/subscription/Subscriptions';
 
 const ManagerDashboardContainer = (WrappedComponent) => class extends Component {
     constructor(props) {
         super(props);
         this.graphqlClient = new GraphQLClient();
-        this.managerService = new ManagerService();
+        this.service = new DashboardService();
         this.subscription = null;
 
         this.initBind();
@@ -36,7 +36,7 @@ const ManagerDashboardContainer = (WrappedComponent) => class extends Component 
 
     getMenus() {
         this.setState({ loading: true });
-        this.managerService.getMenus()
+        this.service.getMenus()
             .then((response) => {
                 const { data, graphQLErrors } = response;
 
@@ -73,7 +73,7 @@ const ManagerDashboardContainer = (WrappedComponent) => class extends Component 
         };
 
         this.setState({ loading: true });
-        this.managerService.getMenuOrders(input)
+        this.service.getMenuOrders(input)
             .then((response) => {
                 const { data, graphQLErrors } = response;
 
@@ -94,7 +94,7 @@ const ManagerDashboardContainer = (WrappedComponent) => class extends Component 
     }
 
     onAdd() {
-        this.managerService.createMenuOrder()
+        this.service.createMenuOrder()
             .then((response) => {
                 const { data, graphQLErrors } = response;
 
@@ -116,7 +116,7 @@ const ManagerDashboardContainer = (WrappedComponent) => class extends Component 
     //SUBSCRIPTIONS
     subscribe() {
         this.unsubscribe();
-        this.graphqlClient.subscribe(this.responseSubscription, ManagerSubscription.MENU_ORDERS)
+        this.graphqlClient.subscribe(this.responseSubscription, Subscriptions.MENU_ORDERS)
             .then((response) => {
                 this.subscription = response;
             })

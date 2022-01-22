@@ -45,4 +45,9 @@ export default class DashboardService {
         return this.graphqlClient
             .mutate(Mutations.CREATE_MENU_ORDER);
     }
+
+    async assingMenuInOrder(input) {
+        return this.graphqlClient
+            .mutate(Mutations.ASSING_MENU_IN_ORDER, input);
+    }
 }

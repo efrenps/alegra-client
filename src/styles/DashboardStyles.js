@@ -33,6 +33,12 @@ export default class DasboardStyles {
                 textAlign: 'center',
                 color: theme.palette.text.secondary,
             },
+            paperSelected: {
+                padding: theme.spacing(1),
+                textAlign: 'center',
+                color: theme.palette.text.secondary,
+                backgroundColor: theme.palette.background.forestGreen,
+            },
             header: {
                 display: 'flex',
                 alignItems: 'center',
@@ -47,13 +53,22 @@ export default class DasboardStyles {
                 padding: '10px',
                 marginRight: '16px',
             },
-            newButton: {
+            smallButton: {
+                color: theme.palette.text.white,
+                width: '100px',
+                padding: '5px 10px 5px 10px'
+            },
+            greenButton: {
                 backgroundColor: theme.palette.background.eucalyptus,
                 '&:hover': {
                     backgroundColor: theme.palette.background.forestGreen,
                 },
             },
-            editButton: {
+            parentFlexCenter: {
+                display: "flex",
+                justifyContent: "center"
+            },
+            blueButton: {
                 backgroundColor: '#59A9FF',
                 '&:hover': {
                     backgroundColor: '#4D91DB',
@@ -96,6 +111,11 @@ export default class DasboardStyles {
                 flexDirection: 'column',
                 padding: '0px',
                 height: '450px',
+            },
+            containerSplitKitchen: {
+                flexDirection: 'column',
+                padding: '0px',
+                height: '550px',
             },
         });
     }

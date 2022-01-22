@@ -16,6 +16,7 @@ import {
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import DashboardStyles from '../styles/DashboardStyles';
@@ -28,10 +29,10 @@ class KitchenDashboard extends Component {
         super(props);
     }
 
-    getColumns(stage) {
+    getColumns(headerName) {
         const {
             props: {
-                classes
+                classes, onSortMeal,
             },
         } = this;
         const columnStyle = {
@@ -45,31 +46,55 @@ class KitchenDashboard extends Component {
 
         const columns = [
             {
-                Header: stage,
+                Header: headerName,
                 id: 'menuOrderId',
                 accessor: 'menuOrderId',
                 style: columnStyle,
                 minWidth: 100,
                 Cell: props => {
                     const { original } = props;
-                    let subtitle = '';
-
-                    if (original.menuId && original.menu) {
-                        const { menu } = original;
-                        subtitle = menu.name;
-                    }
+                    const { menuOrderId, menu } = original;
+                    const isNewOrder = original.status === 'pending';
+                    const isCooking = original.status === 'cooking';
+                    const hasMenuData = original.status === 'storage' || original.status === 'cooking';
 
                     return (
-                        <Paper className={classes.paper} key={ `key-${original.menuOrderId}` }>
+                        <Paper className={classes.paper} key={ `key-${menuOrderId}` }>
                             <Card className={classes.rootCard} variant="outlined">
                                 <CardContent>
                                     <Typography variant="h4" component="div">
-                                        { `Order #${original.menuOrderId}` }
+                                        { `Order #${menuOrderId}` }
                                     </Typography>
-                                    <Typography variant="body2" component="div">
-                                        { subtitle }
-                                    </Typography>
+                                    {hasMenuData && (
+                                        <Typography variant="body2" component="div">
+                                            { menu.name }
+                                        </Typography>
+                                    )}
                                 </CardContent>
+                                {isNewOrder && (
+                                    <CardActions disableSpacing className={classes.parentFlexCenter}>
+                                        <Button
+                                            size="small"
+                                            variant="contained"
+                                            className={clsx(classes.smallButton, classes.blueButton)}
+                                            onClick={() => onSortMeal(menuOrderId)}
+                                        >
+                                            Sort Meal
+                                        </Button>
+                                    </CardActions>
+                                )}
+                                {isCooking && (
+                                    <CardActions disableSpacing className={classes.parentFlexCenter}>
+                                        <Button
+                                            size="small"
+                                            variant="contained"
+                                            className={clsx(classes.smallButton, classes.blueButton)}
+                                            // onClick={() => onSortMeal()}
+                                        >
+                                            Done
+                                        </Button>
+                                    </CardActions>
+                                )}
                             </Card>
                         </Paper>        
                     );
@@ -91,12 +116,22 @@ class KitchenDashboard extends Component {
         if (stage === 'Pending') {
             filter = (element) => (element.status === 'pending');
         } else if (stage === 'In-Progess') {
-            filter = (element) => (element.status === 'storage' || element.status === 'cooking');
+            filter = (element) => (element.status === 'storage');
         } else if (stage === 'Ready') {
-            filter = (element) => element.status === 'ready';
+            filter = (element) => element.status === 'cooking';
         } 
 
         return menuOrders.filter(filter);
+    }
+
+    getClassName (menuId) {
+        const {
+            props: {
+                selectedMenuId, classes
+            },
+        } = this;
+
+        return (menuId &&  menuId === selectedMenuId) ? classes.paperSelected : classes.paper;
     }
 
     renderIngredients (menu) {
@@ -110,7 +145,7 @@ class KitchenDashboard extends Component {
     render() {
         const {
             props: {
-                classes, menus, onAddOrder, loading
+                classes, menus, loading
             },
         } = this;
 
@@ -119,7 +154,7 @@ class KitchenDashboard extends Component {
                 <Grid container className={classes.topSpace} spacing={1}>
                         {menus.map((menu, index) => (
                             <Grid item xs>
-                                <Paper className={classes.paper}>
+                                <Paper className={this.getClassName(menu.menuId)}>
                                     <Card className={classes.rootCard} variant="outlined">
                                         <CardContent>
                                             <Typography variant="h4" component="div">
@@ -134,27 +169,13 @@ class KitchenDashboard extends Component {
                             </Grid>
                         ))}
                 </Grid>
-                <Grid container className={classes.topSpace} spacing={3}>
+                <Grid container spacing={3}>
                         <Grid item xs>
                             <Paper className={classes.paper}>
-                            <Button
-                                size="small"
-                                variant="contained"
-                                className={clsx(classes.button, classes.newButton)}
-                                onClick={() => onAddOrder()}
-                            >
-                                Order meal
-                            </Button>
-                            </Paper>
-                        </Grid>
-                </Grid>
-                    <Grid container spacing={3}>
-                        <Grid item xs>
-                            <Paper className={classes.paper}>
-                                <Container className={classes.containerSplit}>
+                                <Container className={classes.containerSplitKitchen}>
                                     <Table
                                         load={loading}
-                                        columns={this.getColumns('Pending')}
+                                        columns={this.getColumns('New Orders')}
                                         data={this.filterMenuOrders('Pending')}
                                         rowSelected={false}
                                         sortable={false}
@@ -170,10 +191,10 @@ class KitchenDashboard extends Component {
                         </Grid>
                         <Grid item xs>
                             <Paper className={classes.paper}>
-                                <Container className={classes.containerSplit}>
+                                <Container className={classes.containerSplitKitchen}>
                                     <Table
                                         load={loading}
-                                        columns={this.getColumns('In-Progess')}
+                                        columns={this.getColumns('Waiting for Ingredients')}
                                         data={this.filterMenuOrders('In-Progess')}
                                         rowSelected={false}
                                         sortable={false}
@@ -189,10 +210,10 @@ class KitchenDashboard extends Component {
                         </Grid>
                         <Grid item xs>
                             <Paper className={classes.paper}>
-                                <Container className={classes.containerSplit}>
+                                <Container className={classes.containerSplitKitchen}>
                                     <Table
                                         load={loading}
-                                        columns={this.getColumns('Ready')}
+                                        columns={this.getColumns('Cooking')}
                                         data={this.filterMenuOrders('Ready')}
                                         rowSelected={false}
                                         sortable={false}
@@ -206,7 +227,7 @@ class KitchenDashboard extends Component {
                                 </div>
                             </Paper>
                         </Grid>
-                    </Grid>  
+                </Grid>  
             </div>
         );
     }
@@ -218,8 +239,9 @@ KitchenDashboard.propTypes = {
     menus: PropTypes.arrayOf(PropTypes.object).isRequired,
     menuOrders: PropTypes.arrayOf(PropTypes.object).isRequired,
     loading: PropTypes.bool.isRequired,
-    onAddOrder: PropTypes.func.isRequired,
-    onDeliveryOrder: PropTypes.func.isRequired,
+    selectedMenuId: PropTypes.number,
+    onSortMeal: PropTypes.func.isRequired,
+    onComplete: PropTypes.func.isRequired,
 };
 
 export default withRouter(withStyles(styles)(KitchenDashboardContainer(KitchenDashboard)));

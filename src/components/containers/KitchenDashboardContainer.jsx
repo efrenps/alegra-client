@@ -23,6 +23,7 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
         menus: [],
         menuOrders: [],
         loading: false,
+        selectedMenuId: null,
     }
 
     componentDidMount() {
@@ -68,7 +69,7 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
                 dir: 'DESC',
             },
             filter: {
-                status: ['pending', 'cooking', 'storage', 'ready'],
+                status: ['pending', 'storage', 'cooking'],
             },
         };
 
@@ -93,8 +94,23 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
             });
     }
 
-    onAdd() {
-        this.service.createMenuOrder()
+    onSortMeal(menuOrderId) {
+        const { state } = this;
+        const { menus } = state;
+
+        const menuIds = menus.map(item => {
+            return item.menuId
+        });
+
+        const selectedMenuId = menuIds[Math.floor(Math.random() * menuIds.length)];
+        this.setState({ selectedMenuId });
+
+        const input = {
+            menuOrderId,
+            menuId: selectedMenuId
+        };
+
+        this.service.assingMenuInOrder(input)
             .then((response) => {
                 const { data, graphQLErrors } = response;
 
@@ -103,13 +119,16 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
                     return;
                 }
 
-                if (data && data.createMenuOrder) {
-                    ModalUtils.successMessage(null, 'Order created successfully');
+                if (data && data.assingMenuInOrder) {
+                    ModalUtils.successMessage(null, 'Menu assigned successfully');
                 }
+            })
+            .finally(() => {
+                this.setState({ selectedMenuId: null });
             });
     }
 
-    onDelivery() {
+    onComplete() {
         
     }
 
@@ -173,8 +192,8 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
     initBind() {
         this.getMenus = this.getMenus.bind(this);
         this.getMenuOrders = this.getMenuOrders.bind(this);
-        this.onAdd = this.onAdd.bind(this);
-        this.onDelivery = this.onDelivery.bind(this);
+        this.onSortMeal = this.onSortMeal.bind(this);
+        this.onComplete = this.onComplete.bind(this);
         
         this.subscribe = this.subscribe.bind(this);
         this.responseSubscription = this.responseSubscription.bind(this);
@@ -190,8 +209,8 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
             <WrappedComponent
                 {...props}
                 {...state}
-                onAddOrder={this.onAdd}
-                onDeliveryOrder={this.onDelivery}
+                onSortMeal={this.onSortMeal}
+                onComplete={this.onComplete}
             />
         );
     }

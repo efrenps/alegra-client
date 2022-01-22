@@ -140,7 +140,7 @@ class ManagerDashboard extends Component {
                             <Button
                                 size="small"
                                 variant="contained"
-                                className={clsx(classes.button, classes.newButton)}
+                                className={clsx(classes.button, classes.greenButton)}
                                 onClick={() => onAddOrder()}
                             >
                                 Order meal

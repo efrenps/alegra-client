@@ -56,15 +56,18 @@ const Login = () => {
     if (data) {
         const loginData = data?.data?.login;
         const { access_token, user } = loginData;
-        const record = {
-            token: access_token,
-            ...user,
-        }
 
-        console.log(record);
-        keyStore.save(record);
-        updateUserInformation(record);
-        return <Redirect to={`/${user.scope}-dashboard`} />;
+        if(access_token) {
+            const record = {
+                token: access_token,
+                ...user,
+            }
+    
+            keyStore.save(record);
+            updateUserInformation(record);
+            return <Redirect to={`/${user.scope}-dashboard`} />;
+        }
+        return <Redirect to={'/'} />;
     }
 
     return (

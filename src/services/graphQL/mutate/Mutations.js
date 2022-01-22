@@ -7,6 +7,15 @@ export default class Mutations {
         }
     `;
 
+    static ASSING_MENU_IN_ORDER = gql`
+        mutation assingMenuInOrder(
+            $menuOrderId: Int!
+            $menuId: Int!
+        ) {
+            assingMenuInOrder(menuOrderId: $menuOrderId, menuId: $menuId)
+        }
+    `;
+
     static CREATE_PRODUCT_VENDOR = gql`
         mutation addProduct($input: ProductInput) {
             addProduct(input: $input){

@@ -7,6 +7,23 @@ export default class DashboardService {
         this.graphqlClient = new GraphQLClient();
     }
 
+    async getIngredients() {
+        return this.graphqlClient
+            .query(Queries.GET_INGREDIENTS)
+            .then((response) => {
+                const { data, graphQLErrors } = response;
+                if (graphQLErrors) {
+                    return { graphQLErrors };
+                }
+
+                const { getIngredients } = data;  
+
+                return {
+                    data: { ingredients: getIngredients },
+                };
+            });
+    }
+
     async getMenus() {
         return this.graphqlClient
             .query(Queries.GET_MENUS)
@@ -27,6 +44,23 @@ export default class DashboardService {
     async getMenuOrders(input) {
         return this.graphqlClient
             .query(Queries.GET_MENU_ORDERS, input)
+            .then((response) => {
+                const { data, graphQLErrors } = response;
+                if (graphQLErrors) {
+                    return { graphQLErrors };
+                }
+
+                const { getMenuOrders } = data;
+
+                return {
+                    data: { menuOrders: getMenuOrders },
+                };
+            });
+    }
+
+    async getSimplifiedMenuOrders(input) {
+        return this.graphqlClient
+            .query(Queries.GET_MENU_ORDERS_SIMPLIFIED, input)
             .then((response) => {
                 const { data, graphQLErrors } = response;
                 if (graphQLErrors) {

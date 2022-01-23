@@ -23,6 +23,7 @@ import KeyStore from '../utils/KeyStore';
 import Permissions from '../utils/Permissions';
 
 import UserContext from './UserContext';
+import StorageDashboard from './StorageDashboard';
 
 const App = () => {
     const keyStore = new KeyStore();
@@ -76,7 +77,7 @@ const App = () => {
                                         path='/storage-dashboard'
                                         exact
                                     >
-                                        <KitchenDashboard />
+                                        <StorageDashboard />
                                     </ProtectedRoute>
                                 )}
                                 <RedirectNotFound />

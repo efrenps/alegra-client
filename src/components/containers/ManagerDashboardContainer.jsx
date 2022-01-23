@@ -64,7 +64,7 @@ const ManagerDashboardContainer = (WrappedComponent) => class extends Component 
                 limit: 200,
             },
             sort: {
-                fieldName: 'createdAt',
+                fieldName: 'menuOrderId',
                 dir: 'DESC',
             },
             filter: {

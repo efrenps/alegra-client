@@ -182,11 +182,6 @@ class KitchenDashboard extends Component {
                                     />
 
                                 </Container>
-                                <div className={classes.bottom}>
-                                    <div style={{ width: '100%' }}>
-                                        
-                                    </div>
-                                </div>
                             </Paper>
                         </Grid>
                         <Grid item xs>
@@ -201,11 +196,6 @@ class KitchenDashboard extends Component {
                                     />
 
                                 </Container>
-                                <div className={classes.bottom}>
-                                    <div style={{ width: '100%' }}>
-                                        
-                                    </div>
-                                </div>
                             </Paper>
                         </Grid>
                         <Grid item xs>
@@ -220,11 +210,6 @@ class KitchenDashboard extends Component {
                                     />
 
                                 </Container>
-                                <div className={classes.bottom}>
-                                    <div style={{ width: '100%' }}>
-                                        
-                                    </div>
-                                </div>
                             </Paper>
                         </Grid>
                 </Grid>  

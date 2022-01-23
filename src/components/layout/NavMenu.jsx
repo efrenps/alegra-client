@@ -9,8 +9,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import {
     PowerSettingsNew as PowerSettingsNewIcon,
     DashboardOutlined as DashboardIcon,
+    KitchenOutlined as KitchenIcon,
+    StorageOutlined as StorageIcon,
 } from '@material-ui/icons';
-
 // Component and Others
 import PropTypes from 'prop-types';
 import avatarUser from '../../assets/userDefault.jpg';
@@ -44,7 +45,7 @@ class NavMenu extends Component {
                 {
                     text: 'Dashboard',
                     to: '/kitchen-dashboard',
-                    icon: <DashboardIcon className={classes.iconSize} title="Dashboard" />,
+                    icon: <KitchenIcon className={classes.iconSize} title="Kitchen" />,
                 },
             );
         }
@@ -53,7 +54,7 @@ class NavMenu extends Component {
                 {
                     text: 'Dashboard',
                     to: '/storage-dashboard',
-                    icon: <DashboardIcon className={classes.iconSize} title="Dashboard" />,
+                    icon: <StorageIcon className={classes.iconSize} title="Storage" />,
                 },
             );
         }

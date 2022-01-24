@@ -14,7 +14,8 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
         super(props);
         this.graphqlClient = new GraphQLClient();
         this.service = new DashboardService();
-        this.subscription = null;
+        this.menuOrderSubscription = null;
+        this.ingredientSubscription = null;
 
         this.initBind();
     }
@@ -33,7 +34,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
     }
 
     componentWillUnmount() {
-        this.unsubscribe();
+        this.unsubscribeMenuOrder();
     }
 
     getIngredients() {
@@ -46,8 +47,6 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
                     return;
                 }
 
-                console.log(data);
-
                 if (data && data.ingredients) {
                     const { ingredients } = data;
                     this.setState({ ingredients });
@@ -55,6 +54,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
             })
             .finally(() => {
                 this.getMenuOrders();
+                this.subscribeIngredient();
             });
     }
 
@@ -68,8 +68,6 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
                     console.log(graphQLErrors);
                     return;
                 }
-
-                console.log(data);
 
                 if (data && data.menus) {
                     const { menus } = data;
@@ -113,7 +111,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
             })
             .finally(() => {
                 this.setState({ loading: false });
-                this.subscribe();
+                this.subscribeMenuOrder();
             });
     }
 
@@ -172,20 +170,18 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
     }
 
     //SUBSCRIPTIONS
-    subscribe() {
-        this.unsubscribe();
-        this.graphqlClient.subscribe(this.responseSubscription, Subscriptions.MENU_ORDERS)
+    subscribeMenuOrder() {
+        this.unsubscribeMenuOrder();
+        this.graphqlClient.subscribe(this.responseMenuOrderSubscription, Subscriptions.MENU_ORDERS)
             .then((response) => {
-                this.subscription = response;
+                this.menuOrderSubscription = response;
             })
             .catch((error) => {
                 console.log(error);
             })
     }
 
-    responseSubscription(record) {
-        console.log('responseSubscription');
-        console.log(record);
+    responseMenuOrderSubscription(record) {
         const { data } = record;
 
         if (data && data.menuOrders) {
@@ -193,17 +189,17 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
 
             switch (type) {
             case SubscriptionActionType.CREATED:
-                this.addSubscriptionRecord(menuOrder);
+                this.addSubscriptionMenuOrder(menuOrder);
                 break;
             case SubscriptionActionType.UPDATED:
-                this.updateSubscriptionRecord(menuOrder);
+                this.updateSubscriptionMenuOrder(menuOrder);
                 break;
             default:
             }
         }
     }
 
-    addSubscriptionRecord(record) {
+    addSubscriptionMenuOrder(record) {
         this.setState(({ menuOrders }) => {
             const newRecords = update(menuOrders, { $unshift: [record] });
 
@@ -211,7 +207,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
         });
     }
 
-    updateSubscriptionRecord(record) {
+    updateSubscriptionMenuOrder(record) {
         this.setState(({ menuOrders }) => {
             const newRecords = [...menuOrders];
 
@@ -222,9 +218,49 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
         });
     }
 
-    unsubscribe() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
+    unsubscribeMenuOrder() {
+        if (this.menuOrderSubscription) {
+            this.menuOrderSubscription.unsubscribe();
+        }
+    }
+    
+    subscribeIngredient() {
+        this.unsubscribeIngredient();
+        this.graphqlClient.subscribe(this.responseIngredientSubscription, Subscriptions.INGREDIENTS)
+            .then((response) => {
+                this.ingredientSubscription = response;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    responseIngredientSubscription(record) {
+        const { data } = record;
+
+        if (data && data.ingredients) {
+            const { ingredients: { type, ingredient } } = data;
+
+            if (type === SubscriptionActionType.UPDATED) {
+                this.updateSubscriptionIngredient(ingredient);
+            }
+        }
+    }
+
+    updateSubscriptionIngredient(record) {
+        this.setState(({ ingredients }) => {
+            const newRecords = [...ingredients];
+            
+            const recordIndex = newRecords.findIndex((item) => item.ingredientId === record.ingredientId);
+            newRecords[recordIndex] = { ...record };
+
+            return { ingredients: newRecords };
+        });
+    }
+
+    unsubscribeIngredient() {
+        if (this.ingredientSubscription) {
+            this.ingredientSubscription.unsubscribe();
         }
     }
 
@@ -235,11 +271,16 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
         this.onSortMeal = this.onSortMeal.bind(this);
         this.onUpdateOrderStatus = this.onUpdateOrderStatus.bind(this);
         
-        this.subscribe = this.subscribe.bind(this);
-        this.responseSubscription = this.responseSubscription.bind(this);
-        this.addSubscriptionRecord = this.addSubscriptionRecord.bind(this);
-        this.updateSubscriptionRecord = this.updateSubscriptionRecord.bind(this);
-        this.unsubscribe = this.unsubscribe.bind(this);
+        this.subscribeMenuOrder = this.subscribeMenuOrder.bind(this);
+        this.responseMenuOrderSubscription = this.responseMenuOrderSubscription.bind(this);
+        this.addSubscriptionMenuOrder = this.addSubscriptionMenuOrder.bind(this);
+        this.updateSubscriptionMenuOrder = this.updateSubscriptionMenuOrder.bind(this);
+        this.unsubscribeMenuOrder = this.unsubscribeMenuOrder.bind(this);
+
+        this.subscribeIngredient = this.subscribeIngredient.bind(this);
+        this.responseIngredientSubscription = this.responseIngredientSubscription.bind(this);
+        this.updateSubscriptionIngredient = this.updateSubscriptionIngredient.bind(this);
+        this.unsubscribeIngredient = this.unsubscribeIngredient.bind(this);
     }
 
     render() {

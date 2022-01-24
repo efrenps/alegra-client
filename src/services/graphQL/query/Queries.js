@@ -50,19 +50,4 @@ export default class Queries {
             }
         }
     `;
-
-    static PRODUCT_VENDOR_DETAIL = gql`
-        query getProductVendor($productId: Int!) {
-            getProductVendor(productId: $productId) {
-                productId
-                vendorId
-                vendorName
-                productName
-                productPackage
-                productType
-                productActive
-                imported
-            }
-        }
-    `;
 }

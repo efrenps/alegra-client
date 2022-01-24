@@ -24,14 +24,27 @@ export default class Subscriptions {
                 type
                 menuOrder: data {
                     menuOrderId
-                    menuId,
-                    status,
-                    quantity,
+                    menuId
+                    status
+                    quantity
                     createdAt
                     menu {
                         menuId
-                        name,
+                        name
                     }
+                }
+            }
+        }
+    `;
+
+    static INGREDIENTS = gql`
+        subscription ingredients {
+            ingredients {
+                type
+                ingredient: data {
+                    ingredientId
+                    name
+                    quantity
                 }
             }
         }

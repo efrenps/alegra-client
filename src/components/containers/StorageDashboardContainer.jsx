@@ -154,6 +154,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
             menuOrderId
         };
 
+        this.setState({ selectedMenuId: menuOrderId });
         this.service.updateMenuOrderStatus(input)
             .then((response) => {
                 const { data, graphQLErrors } = response;
@@ -166,6 +167,10 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
                 if (data && data.updateMenuOrderStatus) {
                     ModalUtils.successMessage(null, 'Order updated successfully');
                 }
+            })
+            .finally(() => {
+                console.log('UNLOKKKKK!!!!')
+                this.setState({ selectedMenuId: null });
             });
     }
 
@@ -250,7 +255,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
     updateSubscriptionIngredient(record) {
         this.setState(({ ingredients }) => {
             const newRecords = [...ingredients];
-            
+
             const recordIndex = newRecords.findIndex((item) => item.ingredientId === record.ingredientId);
             newRecords[recordIndex] = { ...record };
 
@@ -268,7 +273,6 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
         this.getIngredients = this.getIngredients.bind(this);
         this.getMenus = this.getMenus.bind(this);
         this.getMenuOrders = this.getMenuOrders.bind(this);
-        this.onSortMeal = this.onSortMeal.bind(this);
         this.onUpdateOrderStatus = this.onUpdateOrderStatus.bind(this);
         
         this.subscribeMenuOrder = this.subscribeMenuOrder.bind(this);
@@ -290,7 +294,6 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
             <WrappedComponent
                 {...props}
                 {...state}
-                onSortMeal={this.onSortMeal}
                 onUpdateOrderStatus={this.onUpdateOrderStatus}
             />
         );

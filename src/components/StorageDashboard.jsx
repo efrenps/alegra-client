@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 // Components and Others
 import clsx from 'clsx';
-import PropTypes, { array } from 'prop-types';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import StorageDashboardContainer from './containers/StorageDashboardContainer';
 import Paper from '@material-ui/core/Paper';
@@ -43,7 +43,7 @@ class StorageDashboard extends Component {
     getColumns() {
         const {
             props: {
-                classes, onSortMeal, onUpdateOrderStatus
+                classes, onUpdateOrderStatus
             },
         } = this;
         const columnStyle = {
@@ -84,7 +84,7 @@ class StorageDashboard extends Component {
                 minWidth: 100,
                 Cell: props => {
                     const { original } = props;
-                    const { menuOrderId, menuId } = original;
+                    const { menuId } = original;
                     const menu = this.getMenuRecord(menuId);
                     const ingredients = this.renderMenuIngredients(menu);
 
@@ -102,13 +102,31 @@ class StorageDashboard extends Component {
                 style: columnStyle,
                 minWidth: 100,
                 Cell: props => {
+                    const {
+                        props: {
+                            ingredients, selectedMenuId
+                        },
+                    } = this;
                     const { original } = props;
-                    const { menuOrderId } = original;
+                    const { menuOrderId, menuId } = original;
+                    const menu = this.getMenuRecord(menuId);
+                    const isSaving = selectedMenuId === menuOrderId;
+                    let isOutOfStock = false;
 
+                    menu.ingredients.forEach(menuIngredient => {
+                        const storageIngredient = ingredients.find(ele => ele.ingredientId === menuIngredient.ingredientId);
+                        if (storageIngredient) {
+                            if (storageIngredient.quantity < menuIngredient.quantity) {
+                                isOutOfStock = true;
+                            }
+                        }
+                    });
+                    
                     return (
                         <Button
                                 size="small"
                                 variant="contained"
+                                disabled={isSaving || isOutOfStock}
                                 className={clsx(classes.smallButton, classes.blueButton)}
                                 onClick={() => onUpdateOrderStatus(menuOrderId)}
                                 >
@@ -122,14 +140,20 @@ class StorageDashboard extends Component {
         return columns;
     }
 
-    getClassName (menuId) {
+    getClassName (currentStock) {
         const {
             props: {
-                selectedMenuId, classes
+                classes
             },
         } = this;
 
-        return (menuId &&  menuId === selectedMenuId) ? classes.paperSelected : classes.paper;
+        if (currentStock < 1) {
+            return classes.paperDanger;
+        } else if (currentStock < 3) {
+            return classes.paperWarning;
+        }
+
+        return classes.paper;
     }
 
     renderMenuIngredients (menu) {
@@ -143,14 +167,14 @@ class StorageDashboard extends Component {
     renderIngredients () {
         const {
             props: {
-                classes, ingredients,
+                ingredients,
             },
         } = this;
 
         return (
             ingredients.map((ingredient) => (
                 <Grid item xs>
-                    <Paper className={classes.paper}>
+                    <Paper className={this.getClassName(ingredient.quantity)}>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h4" component="div">
@@ -218,7 +242,6 @@ StorageDashboard.propTypes = {
     menuOrders: PropTypes.arrayOf(PropTypes.object).isRequired,
     loading: PropTypes.bool.isRequired,
     selectedMenuId: PropTypes.number,
-    onSortMeal: PropTypes.func.isRequired,
     onUpdateOrderStatus: PropTypes.func.isRequired,
 };
 

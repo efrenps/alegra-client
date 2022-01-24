@@ -39,6 +39,18 @@ export default class DasboardStyles {
                 color: theme.palette.text.secondary,
                 backgroundColor: theme.palette.background.forestGreen,
             },
+            paperWarning: {
+                padding: theme.spacing(1),
+                textAlign: 'center',
+                color: theme.palette.text.secondary,
+                backgroundColor: '#EDE04D',
+            },
+            paperDanger: {
+                padding: theme.spacing(1),
+                textAlign: 'center',
+                color: theme.palette.text.secondary,
+                backgroundColor: '#ED4F32',
+            },
             header: {
                 display: 'flex',
                 alignItems: 'center',

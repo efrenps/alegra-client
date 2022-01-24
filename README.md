@@ -7,3 +7,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - You need `alegra-oauth` and `alegra-api` in order to run this application.
 - Add your .env file to root folder (please update the GraphQL URL with `alegra-api` url)
 - Run `docker-compose  --env-file .env up -d`
+
+
+# DEMO
+https://youtu.be/3RPNBLcR0fs
+
+
+# SITE
+http://191.96.165.126:3000
+

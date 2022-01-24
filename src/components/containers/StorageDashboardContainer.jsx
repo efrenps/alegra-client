@@ -26,6 +26,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
         menuOrders: [],
         loading: false,
         selectedMenuId: null,
+        selectedIngredientId: null,
     }
 
     componentDidMount() {
@@ -173,6 +174,33 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
             });
     }
 
+    onBuyIngredient(ingredientId) {
+        const input = {
+            ingredientId
+        };
+
+        console.log(input);
+        this.setState({ selectedIngredientId: ingredientId });
+        this.service.buyIngredient(input)
+            .then((response) => {
+                const { data, graphQLErrors } = response;
+                console.log(data);
+
+                if (graphQLErrors) {
+                    console.log(graphQLErrors);
+                    ModalUtils.errorMessage(graphQLErrors);
+                    return;
+                }
+
+                if (data && data.buyIngredient) {
+                    ModalUtils.successMessage(null, 'Ingredient purchased successfully');
+                }
+            })
+            .finally(() => {
+                this.setState({ selectedIngredientId: null });
+            });
+    }
+
     //SUBSCRIPTIONS
     subscribeMenuOrder() {
         this.unsubscribeMenuOrder();
@@ -273,6 +301,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
         this.getMenus = this.getMenus.bind(this);
         this.getMenuOrders = this.getMenuOrders.bind(this);
         this.onUpdateOrderStatus = this.onUpdateOrderStatus.bind(this);
+        this.onBuyIngredient = this.onBuyIngredient.bind(this);
         
         this.subscribeMenuOrder = this.subscribeMenuOrder.bind(this);
         this.responseMenuOrderSubscription = this.responseMenuOrderSubscription.bind(this);
@@ -294,6 +323,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
                 {...props}
                 {...state}
                 onUpdateOrderStatus={this.onUpdateOrderStatus}
+                onBuyIngredient={this.onBuyIngredient}
             />
         );
     }

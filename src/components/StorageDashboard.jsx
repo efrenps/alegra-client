@@ -167,7 +167,7 @@ class StorageDashboard extends Component {
     renderIngredients () {
         const {
             props: {
-                ingredients,
+                ingredients, selectedIngredientId, onBuyIngredient,
             },
         } = this;
 
@@ -188,6 +188,8 @@ class StorageDashboard extends Component {
                                     <IconButton 
                                         color="primary" 
                                         aria-label="buy more"
+                                        disabled={selectedIngredientId === ingredient.ingredientId}
+                                        onClick={() => onBuyIngredient(ingredient.ingredientId)}
                                     >
                                         <ShoppingCartIcon />
                                     </IconButton>
@@ -242,7 +244,9 @@ StorageDashboard.propTypes = {
     menuOrders: PropTypes.arrayOf(PropTypes.object).isRequired,
     loading: PropTypes.bool.isRequired,
     selectedMenuId: PropTypes.number,
+    selectedIngredientId: PropTypes.number,
     onUpdateOrderStatus: PropTypes.func.isRequired,
+    onBuyIngredient: PropTypes.func.isRequired,
 };
 
 export default withRouter(withStyles(styles)(StorageDashboardContainer(StorageDashboard)));

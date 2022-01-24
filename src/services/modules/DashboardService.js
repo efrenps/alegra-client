@@ -90,5 +90,10 @@ export default class DashboardService {
             .mutate(Mutations.UPDATE_MENU_ORDER_STATUS, input);
     }
 
+    async buyIngredient(input) {
+        return this.graphqlClient
+            .mutate(Mutations.BUY_INGREDIENT, input);
+    }
+
     
 }

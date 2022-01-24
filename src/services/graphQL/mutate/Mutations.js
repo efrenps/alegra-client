@@ -23,4 +23,12 @@ export default class Mutations {
             updateMenuOrderStatus(menuOrderId: $menuOrderId)
         }
     `;
+
+    static BUY_INGREDIENT = gql`
+        mutation buyIngredient(
+            $ingredientId: Int!
+        ) {
+            buyIngredient(ingredientId: $ingredientId)
+        }
+    `;
 }

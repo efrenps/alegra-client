@@ -169,7 +169,6 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
                 }
             })
             .finally(() => {
-                console.log('UNLOKKKKK!!!!')
                 this.setState({ selectedMenuId: null });
             });
     }

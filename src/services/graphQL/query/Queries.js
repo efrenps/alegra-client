@@ -40,6 +40,7 @@ export default class Queries {
             }
         }
     `;
+
     static GET_MENU_ORDERS_SIMPLIFIED = gql`
         query getMenuOrders ($filter: MenuOrderFilter, $paginate: Paginate, $sort: Sort){
             getMenuOrders (filter: $filter, paginate: $paginate, sort: $sort){
@@ -47,6 +48,20 @@ export default class Queries {
                 menuId,
                 status,
                 createdAt
+            }
+        }
+    `;
+
+    static GET_INVOICES = gql`
+        query getInvoices ($paginate: Paginate, $sort: Sort){
+            getInvoices (paginate: $paginate, sort: $sort){
+                invoiceId
+                ingredientId
+                quantity,
+                createdAt
+                ingredient {
+                    name
+                }
             }
         }
     `;

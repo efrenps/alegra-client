@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import update from 'immutability-helper';
-import SubscriptionActionType from '../../utils/SubscriptionActionType';
+import { SUBSCRIPTION_ACTION_TYPES, MENU_ORDER_STATUS} from '../../utils/Enums';
 import ModalUtils from '../../utils/ModalUtils';
 
 // GraphQL
@@ -91,7 +91,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
                 dir: 'DESC',
             },
             filter: {
-                status: ['storage'],
+                status: [MENU_ORDER_STATUS.STORAGE],
             },
         };
 
@@ -220,10 +220,10 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
             const { menuOrders: { type, menuOrder } } = data;
 
             switch (type) {
-            case SubscriptionActionType.CREATED:
+            case SUBSCRIPTION_ACTION_TYPES.CREATED:
                 this.addSubscriptionMenuOrder(menuOrder);
                 break;
-            case SubscriptionActionType.UPDATED:
+            case SUBSCRIPTION_ACTION_TYPES.UPDATED:
                 this.updateSubscriptionMenuOrder(menuOrder);
                 break;
             default:
@@ -273,7 +273,7 @@ const StorageDashboardContainer = (WrappedComponent) => class extends Component 
         if (data && data.ingredients) {
             const { ingredients: { type, ingredient } } = data;
 
-            if (type === SubscriptionActionType.UPDATED) {
+            if (type === SUBSCRIPTION_ACTION_TYPES.UPDATED) {
                 this.updateSubscriptionIngredient(ingredient);
             }
         }

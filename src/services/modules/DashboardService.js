@@ -95,5 +95,22 @@ export default class DashboardService {
             .mutate(Mutations.BUY_INGREDIENT, input);
     }
 
+    async getInvoices(input) {
+        return this.graphqlClient
+            .query(Queries.GET_INVOICES, input)
+            .then((response) => {
+                const { data, graphQLErrors } = response;
+                if (graphQLErrors) {
+                    return { graphQLErrors };
+                }
+
+                const { getInvoices } = data;
+
+                return {
+                    data: { invoices: getInvoices },
+                };
+            });
+    }
+
     
 }

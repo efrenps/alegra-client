@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import update from 'immutability-helper';
-import SubscriptionActionType from '../../utils/SubscriptionActionType';
+import { SUBSCRIPTION_ACTION_TYPES, MENU_ORDER_STATUS} from '../../utils/Enums';
 import ModalUtils from '../../utils/ModalUtils';
 
 // GraphQL
@@ -69,7 +69,7 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
                 dir: 'DESC',
             },
             filter: {
-                status: ['pending', 'storage', 'cooking'],
+                status: [MENU_ORDER_STATUS.PENDING, MENU_ORDER_STATUS.STORAGE, MENU_ORDER_STATUS.COOKING],
             },
         };
 
@@ -161,7 +161,6 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
     }
 
     responseSubscription(record) {
-        console.log('responseSubscription');
         console.log(record);
         const { data } = record;
 
@@ -169,10 +168,10 @@ const KitchenDashboardContainer = (WrappedComponent) => class extends Component 
             const { menuOrders: { type, menuOrder } } = data;
 
             switch (type) {
-            case SubscriptionActionType.CREATED:
+            case SUBSCRIPTION_ACTION_TYPES.CREATED:
                 this.addSubscriptionRecord(menuOrder);
                 break;
-            case SubscriptionActionType.UPDATED:
+            case SUBSCRIPTION_ACTION_TYPES.UPDATED:
                 this.updateSubscriptionRecord(menuOrder);
                 break;
             default:

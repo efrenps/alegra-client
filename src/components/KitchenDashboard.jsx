@@ -21,6 +21,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import DashboardStyles from '../styles/DashboardStyles';
 import { Table } from './Table';
+import { MENU_ORDER_STATUS} from '../utils/Enums';
 
 const styles = (theme) => DashboardStyles.listStyles(theme);
 
@@ -54,9 +55,9 @@ class KitchenDashboard extends Component {
                 Cell: props => {
                     const { original } = props;
                     const { menuOrderId, menu, status } = original;
-                    const isNewOrder = status === 'pending';
-                    const isCooking = status === 'cooking';
-                    const hasMenuData = status === 'storage' || status === 'cooking';
+                    const isNewOrder = status === MENU_ORDER_STATUS.PENDING;
+                    const isCooking = status === MENU_ORDER_STATUS.COOKING;
+                    const hasMenuData = status === MENU_ORDER_STATUS.STORAGE || status === MENU_ORDER_STATUS.COOKING;
 
                     return (
                         <Paper className={classes.paper} key={ `key-${menuOrderId}` }>
@@ -114,11 +115,11 @@ class KitchenDashboard extends Component {
 
         let filter = null;
         if (stage === 'Pending') {
-            filter = (element) => (element.status === 'pending');
+            filter = (element) => (element.status === MENU_ORDER_STATUS.PENDING);
         } else if (stage === 'In-Progess') {
-            filter = (element) => (element.status === 'storage');
+            filter = (element) => (element.status === MENU_ORDER_STATUS.STORAGE);
         } else if (stage === 'Ready') {
-            filter = (element) => element.status === 'cooking';
+            filter = (element) => element.status === MENU_ORDER_STATUS.COOKING;
         } 
 
         return menuOrders.filter(filter);

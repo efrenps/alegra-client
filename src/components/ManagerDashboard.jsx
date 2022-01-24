@@ -21,6 +21,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import DashboardStyles from '../styles/DashboardStyles';
 import { Table } from './Table';
+import { MENU_ORDER_STATUS} from '../utils/Enums';
 
 const styles = (theme) => DashboardStyles.listStyles(theme);
 
@@ -54,10 +55,10 @@ class ManagerDashboard extends Component {
                 Cell: props => {
                     const { original } = props;
                     const { menuOrderId, menu, status } = original;
-                    const isReady = status === 'ready';
-                    const hasMenuData = status === 'storage' || status === 'cooking' || status === 'ready';
-                    const showStatus = status === 'storage' || status === 'cooking';
-                    const statusLabel = status === 'storage' ? 'Preparing Ingredients' : status;
+                    const isReady = status === MENU_ORDER_STATUS.READY;
+                    const hasMenuData = status === MENU_ORDER_STATUS.STORAGE || status === MENU_ORDER_STATUS.COOKING || status === MENU_ORDER_STATUS.READY;
+                    const showStatus = status === MENU_ORDER_STATUS.STORAGE || status === MENU_ORDER_STATUS.COOKING;
+                    const statusLabel = status === MENU_ORDER_STATUS.STORAGE ? 'Preparing Ingredients' : status;
 
                     return (
                         <Paper className={classes.paper} key={ `key-${original.menuOrderId}` }>
@@ -108,11 +109,11 @@ class ManagerDashboard extends Component {
 
         let filter = null;
         if (stage === 'Pending') {
-            filter = (element) => (element.status === 'pending');
+            filter = (element) => (element.status === MENU_ORDER_STATUS.PENDING);
         } else if (stage === 'In-Progess') {
-            filter = (element) => (element.status === 'storage' || element.status === 'cooking');
+            filter = (element) => (element.status === MENU_ORDER_STATUS.STORAGE || element.status === MENU_ORDER_STATUS.COOKING);
         } else if (stage === 'Ready') {
-            filter = (element) => element.status === 'ready';
+            filter = (element) => element.status === MENU_ORDER_STATUS.READY;
         } 
 
         return menuOrders.filter(filter);

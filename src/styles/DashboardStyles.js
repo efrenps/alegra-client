@@ -14,6 +14,9 @@ export default class DasboardStyles {
             topSpace: {
                 marginTop: '25px',
             },
+            marginLeft: {
+                marginLeft: '10px',
+            },
             rootCard: {
                 minWidth: 200,
             },
@@ -128,6 +131,11 @@ export default class DasboardStyles {
                 flexDirection: 'column',
                 padding: '0px',
                 height: '550px',
+            },
+            containerHistory: {
+                flexDirection: 'column',
+                padding: '0px',
+                height: '650px',
             },
         });
     }

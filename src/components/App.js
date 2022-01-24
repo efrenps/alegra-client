@@ -24,6 +24,8 @@ import Permissions from '../utils/Permissions';
 
 import UserContext from './UserContext';
 import StorageDashboard from './StorageDashboard';
+import InvoiceHistory from './InvoiceHistory'
+import OrderHistory from './OrderHistory';
 
 const App = () => {
     const keyStore = new KeyStore();
@@ -78,6 +80,22 @@ const App = () => {
                                         exact
                                     >
                                         <StorageDashboard />
+                                    </ProtectedRoute>
+                                )}
+                                {keyStore.hasPermission(Permissions.MANAGER) && (
+                                    <ProtectedRoute
+                                        path='/invoice-history'
+                                        exact
+                                    >
+                                        <InvoiceHistory />
+                                    </ProtectedRoute>
+                                )}
+                                {keyStore.hasPermission(Permissions.MANAGER) && (
+                                    <ProtectedRoute
+                                        path='/order-history'
+                                        exact
+                                    >
+                                        <OrderHistory />
                                     </ProtectedRoute>
                                 )}
                                 <RedirectNotFound />

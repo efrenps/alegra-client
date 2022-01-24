@@ -23,6 +23,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import DashboardStyles from '../styles/DashboardStyles';
 import { Table } from './Table';
+import { MENU_ORDER_STATUS} from '../utils/Enums';
 
 const styles = (theme) => DashboardStyles.listStyles(theme);
 
@@ -209,7 +210,7 @@ class StorageDashboard extends Component {
             },
         } = this;
 
-        const filteredRecords = menuOrders.filter(record => record.status === 'storage');
+        const filteredRecords = menuOrders.filter(record => record.status === MENU_ORDER_STATUS.STORAGE);
 
         return (
             <div className={classes.root}>

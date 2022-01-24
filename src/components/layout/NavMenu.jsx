@@ -11,6 +11,8 @@ import {
     DashboardOutlined as DashboardIcon,
     KitchenOutlined as KitchenIcon,
     StorageOutlined as StorageIcon,
+    ShoppingCartOutlined as ShoppingIcon,
+    HistoryOutlined as HistoryIcon,
 } from '@material-ui/icons';
 // Component and Others
 import PropTypes from 'prop-types';
@@ -55,6 +57,24 @@ class NavMenu extends Component {
                     text: 'Dashboard',
                     to: '/storage-dashboard',
                     icon: <StorageIcon className={classes.iconSize} title="Storage" />,
+                },
+            );
+        }
+        if (keyStore.hasPermission(Permissions.MANAGER)) {
+            modules.push(
+                {
+                    text: 'Orders',
+                    to: '/order-history',
+                    icon: <HistoryIcon className={classes.iconSize} title="Orders" />,
+                },
+            );
+        }
+        if (keyStore.hasPermission(Permissions.MANAGER)) {
+            modules.push(
+                {
+                    text: 'Invoices',
+                    to: '/invoice-history',
+                    icon: <ShoppingIcon className={classes.iconSize} title="Invoices" />,
                 },
             );
         }
